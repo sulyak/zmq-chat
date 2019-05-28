@@ -65,33 +65,3 @@ class ClientChat(object):
         # so that when user sends interrupt, whole program stops
         thread.daemon = True
         thread.start()
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description='Run a chat client')
-
-    # maybe make selection of username interactive
-    parser.add_argument('username',
-                        type=str,
-                        help='your preferred username')
-    parser.add_argument('--config-file',
-                        type=str,
-                        help='path to an alternate config file, defaults to zmq-chat.cfg')
-
-    return parser.parse_args()
-
-
-if '__main__' == __name__:
-    try:
-        args = parse_args()
-        config_file = args.config_file if args.config_file is not None else 'zmq-chat.cfg'
-        config = configparser.ConfigParser()
-        config.read(config_file)
-        config = config['default']
-
-        client = ClientChat(args.username,
-                            config['server_host'], config['chat_port'])
-        client.start_main_loop()
-
-    except KeyboardInterrupt:
-        pass
